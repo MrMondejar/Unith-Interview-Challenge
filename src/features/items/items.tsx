@@ -1,96 +1,74 @@
-import React, { useState } from 'react';
-import { useAppSelector, useAppDispatch } from '../../app/hooks';
-import { Item } from './item';
-import Paper  from "@mui/material/Paper";
-import { styled } from '@mui/material/styles';
+import { useDispatch, useSelector } from "react-redux"
+import { RootState } from '../../app/store'
+import {
+  selectAllItems,
+  selectItem
+} from "./itemsSlice"
+import { useNavigate } from "react-router-dom";
 
-import { loadItems } from './itemsSlice';
 
+import Grid from '@mui/material/Grid'
+import Button from "@mui/material/Button";
+import Typography from '@mui/material/Typography'
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent'
+import CardMedia from '@mui/material/CardMedia'
+import CardActions from '@mui/material/CardActions';
+import { styled } from '@mui/material/styles'
+import { Item } from "./item";
 
-const ItemElement = styled(Paper)(({ theme }) => ({
-  width: 120,
-  height: 120,
-  padding: theme.spacing(2),
-  ...theme.typography.body2,
-  textAlign: 'center',
-}));
+const CardCustom = styled(Card)(() => ({}))
 
 export const Items = () => {
-  // const dispatch = useAppDispatch();
-  // dispatch(loadItems)
+  const dispatch = useDispatch();
+  const items = useSelector(selectAllItems);
+  const itemsStatus = useSelector((state: RootState) => state.items.status);
+  const navigate = useNavigate();
 
-  return (
-      <ItemElement />
-  );
+  let itemsGrid
+
+  const activateItem = (item: Item) => {
+    dispatch(selectItem(item))
+    navigate(`/${item.id}/${item.key}`)
+  }
+
+  if (itemsStatus=== 'succeded' && items && items.length >= 0) {
+    itemsGrid = items.map((item) => (
+      <Grid key={item.index} item xs={6} sm={4} m={3} lg={2} >
+        <CardCustom sx={{ 
+          height: '30vh', 
+          width: '30vh',
+          border: item.active ? 'solid red' : ""
+        }}>
+            <CardMedia
+              sx={{ height: '13vh' }}
+              image={item.image}
+              title={item.key}
+            />
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="div">
+                {item.title}
+              </Typography>
+              {item.description && <Typography variant="body2" color="text.secondary">
+                {item.description}
+              </Typography>}
+            </CardContent>
+            <CardActions>
+              <Button size="small" onClick={() => activateItem(item)}>Select</Button>
+            </CardActions>
+        </CardCustom>
+      </Grid>
+    ));
+  }
+    return (
+      <Grid
+        container
+        spacing={2}
+        direction="row"
+        justifyContent="center"
+        alignItems="center"  
+      >
+        {itemsGrid}
+      </Grid>
+    );
 };
-
-
- // const dispatch = useDispatch();
-    // const orderedPostIds = useSelector(selectPostIds);
-    // const posts = useSelector(selectAllPosts);
-
-    // const postStatus = useSelector((state: RootState) => state.posts.status);
-    // const error = useSelector((state: RootState) => state.posts.error);
-
-    // useEffect(() => {
-    //     if (postStatus === "idle") {
-    //         dispatch(fetchPosts());
-    //     }
-    // }, [postStatus, dispatch]);
-
-    // let content;
-
-    // if (postStatus === "loading") {
-    //     content = <Spinner text="Loading..." />;
-    // } else if (postStatus === "succeeded") {
-    //     content = orderedPostIds.map((postId) => (
-    //         <PostExcerpt key={postId} postId={postId} />
-    //     ));
-    // } else if (postStatus === "failed") {
-    //     content = <div>{error}</div>;
-    // }
-  // content = `<Paper></Paper>`
-
-// import React, { useEffect } from "react";
-// import { useSelector, useDispatch } from "react-redux";
-// import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-
-// import { useAppSelector } from "../../app/hooks";
-// import { Link } from "react-router-dom";
-// import { Post } from "./Post";
-// import { PostAuthor } from "./PostAuthor";
-// import { TimeAgo } from "./TimeAgo";
-// import { ReactionButtons } from "./ReactionButtons";
-// import {
-//     selectAllPosts,
-//     fetchPosts,
-//     selectPostIds,
-//     selectPostById,
-// } from "./postsSlice";
-// import type { RootState } from "../../app/store";
-// import { Spinner } from "../../components/Spinner";
-
-// interface Props {
-//     postId: any;
-// }
-
-// const PostExcerpt = ({ postId }: Props) => {
-//     const post = useSelector((state: RootState) =>
-//         selectPostById(state, postId)
-//     );
-//     return (
-//         <article className="post-excerpt">
-//             <h3>{post?.title}</h3>
-//             <div>
-//                 <PostAuthor userId={post?.user} />
-//                 <TimeAgo timestamp={post?.date} />
-//             </div>
-//             <p className="post-content">{post?.content.substring(0, 100)}</p>
-
-//             {post && <ReactionButtons post={post} />}
-//             <Link to={`/posts/${post?.id}`} className="button muted-button">
-//                 View Post
-//             </Link>
-//         </article>
-//     );
-// };
