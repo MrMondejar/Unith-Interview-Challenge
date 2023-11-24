@@ -41,9 +41,11 @@ export const Items = () => {
           border: item.active ? 'solid red' : ""
         }}>
             <CardMedia
+              component="img"
               sx={{ height: '13vh' }}
               image={item.image}
               title={item.key}
+              alt={item.title}
             />
             <CardContent>
               <Typography gutterBottom variant="h5" component="div">

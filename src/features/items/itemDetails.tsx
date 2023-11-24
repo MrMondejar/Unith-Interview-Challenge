@@ -16,38 +16,40 @@ export const ItemDetails = () => {
   );
 
   return (
-    <Grid
-      container
-      spacing={2}
-      direction="column"
-      justifyContent="center"
-      alignItems="center"  
-    >
-      <Grid key={item.index} item xs={12}>
-        <Card sx={{ 
-          height: '75vh', 
-          width: '90vh',
-        }}>
-            <CardMedia
-              sx={{ height: '34vh' }}
-              image={item.image}
-              title={item.key}
-            />
-            <CardContent>
-              <Typography gutterBottom variant="h5" component="div">
-                {item.title}
-              </Typography>
-              {item.description && <Typography variant="body2" color="text.secondary">
-                {item.description}
-              </Typography>}
-            </CardContent>
-        </Card>
-      </Grid>
-      <Grid item>
-        <div>
-          <Button onClick={()=>navigate('/')}>Back To Items List</Button>
-        </div>
-      </Grid>
-    </Grid>
+    <>
+      {item && <Grid
+        container
+        spacing={2}
+        direction="column"
+        justifyContent="center"
+        alignItems="center"  
+      >
+        <Grid key={item.index} item xs={12}>
+          <Card sx={{ 
+            height: '75vh', 
+            width: '90vh',
+          }}>
+              <CardMedia
+                sx={{ height: '34vh' }}
+                image={item.image}
+                title={item.key}
+              />
+              <CardContent>
+                <Typography gutterBottom variant="h5" component="div">
+                  {item.title}
+                </Typography>
+                {item.description && <Typography variant="body2" color="text.secondary">
+                  {item.description}
+                </Typography>}
+              </CardContent>
+          </Card>
+        </Grid>
+        <Grid item>
+          <div>
+            <Button onClick={()=>navigate('/')}>Back To Items List</Button>
+          </div>
+        </Grid>
+      </Grid>}
+    </>
   )
 }

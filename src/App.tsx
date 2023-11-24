@@ -8,7 +8,6 @@ import { styled } from '@mui/material/styles';
 
 import { Items } from './features/items/items';
 import { ItemDetails } from "./features/items/itemDetails";
-import { useEffect } from "react";
 
 const AppTitle = styled('div')(({ theme }) => ({
   ...theme.typography.h1,
@@ -24,12 +23,9 @@ function App() {
   const dispatch = useDispatch();
   const itemsStatus = useSelector((state: RootState) => state.items.status);
   
-  useEffect(() => {
-    if (itemsStatus === "idle") {
-      dispatch(fetchAPI())
-    }
-}, [itemsStatus, dispatch]);
-
+  if (itemsStatus === ("idle" || "failed")) {
+    dispatch(fetchAPI())
+  }
 
   return (
     <>

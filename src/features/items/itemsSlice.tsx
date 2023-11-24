@@ -9,7 +9,7 @@ const itemsAdapter = createEntityAdapter<Item>({
 
 const initialState = itemsAdapter.getInitialState({
   status: 'idle',
-  error: null
+  errorMessage: ''
 })
 
 export const fetchAPI = createAsyncThunk("items/fetchAPI", async () => {
@@ -27,115 +27,6 @@ export const fetchAPI = createAsyncThunk("items/fetchAPI", async () => {
   return itemsArray
 })
 
-export function fetchItems() {
-  const mock_data = [
-    {
-      id: 1,
-      image: 'https://picsum.photos/id/4/200/300',
-      title: 'title 1',
-      description: 'desc1',
-      selected: false
-    },
-    {
-      id: 2,
-      image: 'http://www.officialpsds.com/images/stocks/ALLEY-stock1502.jpg',
-      title: 'title 2',
-      selected: false
-    },
-    {
-      id: 3,
-      image: 'http://google.com',
-      title: 'title 3',
-      selected: false
-    },
-    {
-      id: 4,
-      image: 'https://picsum.photos/id/4/200/300',
-      title: 'title 1',
-      description: 'desc1',
-      selected: false
-    },
-    {
-      id: 5,
-      image: 'http://www.officialpsds.com/images/stocks/ALLEY-stock1502.jpg',
-      title: 'title 2',
-      selected: false
-    },
-    {
-      id: 6,
-      image: 'http://google.com',
-      title: 'title 3',
-      selected: false
-    },
-    {
-      id: 7,
-      image: 'https://picsum.photos/id/4/200/300',
-      title: 'title 1',
-      description: 'desc1',
-      selected: false
-    },
-    {
-      id: 8,
-      image: 'http://www.officialpsds.com/images/stocks/ALLEY-stock1502.jpg',
-      title: 'title 2',
-      selected: false
-    },
-    {
-      id: 9,
-      image: 'http://google.com',
-      title: 'title 3',
-      selected: false
-    },
-    {
-      id: 10,
-      image: 'https://picsum.photos/id/4/200/300',
-      title: 'title 1',
-      description: 'desc1',
-      selected: false
-    },
-    {
-      id: 11,
-      image: 'http://www.officialpsds.com/images/stocks/ALLEY-stock1502.jpg',
-      title: 'title 2',
-      selected: false
-    },
-    {
-      id: 12,
-      image: 'http://google.com',
-      title: 'title 3',
-      selected: false
-    },
-    {
-      id: 12,
-      image: 'https://picsum.photos/id/4/200/300',
-      title: 'title 1',
-      description: 'desc1',
-      selected: false
-    },
-    {
-      id: 13,
-      image: 'http://www.officialpsds.com/images/stocks/ALLEY-stock1502.jpg',
-      title: 'title 2',
-      selected: false
-    },
-    {
-      id: 14,
-      image: 'http://google.com',
-      title: 'title 3',
-      selected: false
-    }
-  ]
-
-  return new Promise<{ data: Array<Item> }>((resolve) =>
-    setTimeout(() => resolve({ data: mock_data }), 500)
-  );
-}
-
-export const loadItems = createAsyncThunk("items/fetchItems", async () => {
-  const response = await fetchItems()
-  return response.data
-});
-
 const itemsSlice = createSlice({
   name: 'items',
   initialState,
@@ -147,14 +38,6 @@ const itemsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(loadItems.pending, (state) => {state.status = "loading"})
-      .addCase(loadItems.fulfilled, (state, action) => {
-        state.status = "succeded";
-        itemsAdapter.upsertMany(state, action.payload);
-      })
-      .addCase(loadItems.rejected, (state) => {
-        state.status = "failed";
-      })
       .addCase(fetchAPI.pending, (state) => {
         state.status = "loading";
       })
@@ -162,8 +45,13 @@ const itemsSlice = createSlice({
         state.status = "succeded"
         itemsAdapter.upsertMany(state, action.payload);
       })
-      .addCase(fetchAPI.rejected, (state) => {
+      .addCase(fetchAPI.rejected, (state, action) => {
         state.status = "failed";
+        if (action.payload) {
+          state.errorMessage = 'Specific error'
+        } else {
+          state.errorMessage = 'Unknown error'
+        }
       })
   }
 });
@@ -176,4 +64,3 @@ export const {
   selectAll: selectAllItems,
   selectById: selectItemById
 } = itemsAdapter.getSelectors((state: RootState) => state.items)
-
