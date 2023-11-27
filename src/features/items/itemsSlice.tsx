@@ -3,13 +3,22 @@ import { Item } from './item.model'
 import { RootState } from '../../app/store'
 import axios from 'axios'
 
+export interface ItemsState {
+  status: 'idle' | 'loading' | 'succeded' | 'failed',
+  errorMessage: string,
+  entities: Item[],
+  ids: number[]
+}
+
 const itemsAdapter = createEntityAdapter<Item>({
   sortComparer: (a, b) => a.id - b.id
 })
 
 const initialState = itemsAdapter.getInitialState({
   status: 'idle',
-  errorMessage: ''
+  errorMessage: '',
+  entities: [],
+  ids:[]
 })
 
 export const fetchAPI = createAsyncThunk("items/fetchAPI", async () => {

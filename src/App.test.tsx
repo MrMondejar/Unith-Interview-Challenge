@@ -13,14 +13,14 @@ import App from './App';
 
 // Tests
 describe('Renders main page correctly', async () => {
-    it('it renders', () => {
-      render(
-        <Provider store={store}>
-          <App />
-        </Provider>,
-        { wrapper: BrowserRouter }
-      );
-      const titleElement = screen.getByText('Unith challenge')
-      expect(titleElement).toBeInTheDocument();
-    });
+  it('it renders', () => {
+    render(
+      <Provider store={store}>
+        <App />
+      </Provider>,
+      { wrapper: BrowserRouter }
+    );
+    const titleElement = screen.getByText('Unith challenge')
+    expect(titleElement).toBeInTheDocument();
+  });
 });
