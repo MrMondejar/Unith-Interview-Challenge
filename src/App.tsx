@@ -1,12 +1,12 @@
 import { Routes, Route } from "react-router-dom";
 import { RootState } from "./app/store";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { fetchAPI } from './features/items/itemsSlice.tsx'
 import Box from '@mui/material/Box'
-import { Grid } from '@mui/material';
+import { Button, Grid } from '@mui/material';
 import { styled } from '@mui/material/styles';
-
-import { Items } from './features/items/items';
+import { store } from './app/store.tsx'
+import { ItemsGrid } from './features/items/itemsGrid.tsx';
 import { ItemDetails } from "./features/items/itemDetails";
 
 const AppTitle = styled('div')(({ theme }) => ({
@@ -20,17 +20,17 @@ const AppInfo = styled('div')(({ theme }) => ({
 }))
 
 function App() {
-  const dispatch = useDispatch();
-  const itemsStatus = useSelector((state: RootState) => state.items.status);
-  
+  const itemsStatus = useSelector((state: RootState) => state.items.status)
+  const errorMessage = useSelector((state:RootState) => state.items.errorMessage)
+
   if (itemsStatus === ("idle" || "failed")) {
-    dispatch(fetchAPI())
+    store.dispatch(fetchAPI())
   }
 
   return (
     <>
       <Box sx={{ flexGrow: 1 }}>
-        <AppTitle>Unith test</AppTitle>
+        <AppTitle>Unith challenge</AppTitle>
         <Grid
           container
           spacing={2}
@@ -44,9 +44,16 @@ function App() {
             justifyContent="center"
           >
             {itemsStatus === ('loading' || 'idle') && <AppInfo>Loading...</AppInfo>}
-            {itemsStatus === 'failed' && <AppInfo>Failed loading items</AppInfo>}
+            {itemsStatus === 'failed' && 
+              <>
+                <AppInfo>{errorMessage}</AppInfo>
+                <Box textAlign='center'>
+                  <Button variant='contained' onClick={async () => { store.dispatch(fetchAPI()) }}>ReLoad Items</Button>
+                </Box>
+              </>
+            }
             <Routes>
-              <Route path="/" element={<Items />} />
+              <Route path="/" element={<ItemsGrid />} />
               <Route path="/:id/:key" element={<ItemDetails />} />
             </Routes>
           </Grid>

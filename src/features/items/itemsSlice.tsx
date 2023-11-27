@@ -1,5 +1,5 @@
 import { createAsyncThunk, createEntityAdapter, createSlice } from '@reduxjs/toolkit'
-import { Item } from './item'
+import { Item } from './item.model'
 import { RootState } from '../../app/store'
 import axios from 'axios'
 
@@ -47,8 +47,12 @@ const itemsSlice = createSlice({
       })
       .addCase(fetchAPI.rejected, (state, action) => {
         state.status = "failed";
-        if (action.payload) {
-          state.errorMessage = 'Specific error'
+        if (action.error) {
+          if (action.error.code === 'ERR_BAD_REQUEST') {
+            state.errorMessage = 'Bad request error'
+          } else {
+            state.errorMessage = 'Other error'
+          }
         } else {
           state.errorMessage = 'Unknown error'
         }
@@ -59,7 +63,7 @@ const itemsSlice = createSlice({
 export const { selectItem } = itemsSlice.actions;
 
 export default itemsSlice.reducer;
-
+  
 export const {
   selectAll: selectAllItems,
   selectById: selectItemById

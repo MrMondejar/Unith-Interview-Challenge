@@ -8,18 +8,15 @@ import { useNavigate } from "react-router-dom";
 
 
 import Grid from '@mui/material/Grid'
-import Button from "@mui/material/Button";
+import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography'
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent'
 import CardMedia from '@mui/material/CardMedia'
 import CardActions from '@mui/material/CardActions';
-import { styled } from '@mui/material/styles'
-import { Item } from "./item";
+import { Item } from "./item.model";
 
-const CardCustom = styled(Card)(() => ({}))
-
-export const Items = () => {
+export const ItemsGrid = () => {
   const dispatch = useDispatch();
   const items = useSelector(selectAllItems);
   const itemsStatus = useSelector((state: RootState) => state.items.status);
@@ -32,16 +29,19 @@ export const Items = () => {
     navigate(`/${item.id}/${item.key}`)
   }
 
-  if (itemsStatus=== 'succeded' && items && items.length >= 0) {
+  if (itemsStatus === 'succeded' && items && items.length >= 0) {
     itemsGrid = items.map((item) => (
       <Grid key={item.index} item xs={6} sm={4} m={3} lg={2} >
-        <CardCustom sx={{ 
-          height: '30vh', 
-          width: '30vh',
-          border: item.active ? 'solid red' : ""
-        }}>
+        <IconButton onClick={() => activateItem(item)}>
+          <Card
+            sx={{ 
+              height: '30vh', 
+              width: '30vh',
+              border: item.active ? 'solid red' : ""
+            }}
+          >
             <CardMedia
-              component="img"
+              component='img'
               sx={{ height: '13vh' }}
               image={item.image}
               title={item.key}
@@ -56,21 +56,23 @@ export const Items = () => {
               </Typography>}
             </CardContent>
             <CardActions>
-              <Button size="small" onClick={() => activateItem(item)}>Select</Button>
-            </CardActions>
-        </CardCustom>
+              {/* <Button size="small" onClick={() => activateItem(item)}>Select</Button> */}
+              </CardActions>
+          </Card>
+        </IconButton>
       </Grid>
     ));
   }
-    return (
-      <Grid
-        container
-        spacing={2}
-        direction="row"
-        justifyContent="center"
-        alignItems="center"  
-      >
-        {itemsGrid}
-      </Grid>
-    );
+
+  return (
+    <Grid
+      container
+      spacing={2}
+      direction="row"
+      justifyContent="center"
+      alignItems="center"  
+    >
+      { itemsGrid }
+    </Grid>
+  );
 };

@@ -18,21 +18,29 @@ export const ItemDetails = () => {
   return (
     <>
       {item && <Grid
+        alignContent="center"
+        alignItems="center"  
         container
-        spacing={2}
         direction="column"
         justifyContent="center"
-        alignItems="center"  
+        spacing={2}
       >
-        <Grid key={item.index} item xs={12}>
+        <Grid
+          item
+          justifyContent="center"
+          key={item.index}
+          xs={12}
+        >
           <Card sx={{ 
             height: '75vh', 
             width: '90vh',
           }}>
               <CardMedia
+                component='img'
                 sx={{ height: '34vh' }}
                 image={item.image}
                 title={item.key}
+                alt={item.title}
               />
               <CardContent>
                 <Typography gutterBottom variant="h5" component="div">
