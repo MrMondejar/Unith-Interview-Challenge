@@ -8,5 +8,12 @@ To run development:
 
 To run the tests:
 
-1. `npm run tests` 
+   `npm run tests` 
    Please run this command from root of the project, due to some issues in configuration, it won't work from anywhere else.
+
+Docker
+
+To run docker use:
+
+1. docker build -t [any name] .
+2. docker run -d --rm -p 5173:5173 --name [name of the container] [your docker image name]
