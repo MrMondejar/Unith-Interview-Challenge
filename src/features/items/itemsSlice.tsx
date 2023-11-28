@@ -5,9 +5,7 @@ import axios from 'axios'
 
 export interface ItemsState {
   status: 'idle' | 'loading' | 'succeded' | 'failed',
-  errorMessage: string,
-  entities: Item[],
-  ids: number[]
+  errorMessage: string
 }
 
 const itemsAdapter = createEntityAdapter<Item>({

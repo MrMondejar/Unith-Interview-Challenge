@@ -13,7 +13,6 @@ import Typography from '@mui/material/Typography'
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent'
 import CardMedia from '@mui/material/CardMedia'
-import CardActions from '@mui/material/CardActions';
 import { Item } from "./item.model";
 
 export const ItemsGrid = () => {
@@ -55,9 +54,6 @@ export const ItemsGrid = () => {
                 {item.description}
               </Typography>}
             </CardContent>
-            <CardActions>
-              {/* <Button size="small" onClick={() => activateItem(item)}>Select</Button> */}
-              </CardActions>
           </Card>
         </IconButton>
       </Grid>
